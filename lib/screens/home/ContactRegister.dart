@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import '../../components/input/Input.dart';
 import '../../components/input/InputCpf.dart';
-import '../../components/input/InputObscure.dart';
 
 class ContactRegister extends StatefulWidget {
   const ContactRegister({super.key});
