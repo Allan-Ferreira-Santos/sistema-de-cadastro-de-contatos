@@ -1,5 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_vaga/components/input/InputCpf.dart';
+import 'package:test_vaga/controller/UserController.dart';
+import 'package:test_vaga/model/User.dart';
 
 import '../../components/input/Input.dart';
 import '../../components/input/InputObscure.dart';
@@ -12,32 +17,12 @@ class CreateAccount extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccount> {
-  String? email;
-  String? cpf;
-  String? password;
-  String? ConfirmPassword;
-
   final _formKey = GlobalKey<FormState>();
 
-  _Register() {
-    if (_formKey.currentState!.validate()) {
-      print(email);
-      print(cpf);
-      print(password);
-      print(ConfirmPassword);
-
-      Map<String, dynamic> data = {
-        'email': email,
-        'cpf': cpf,
-        'password': password,
-        'ConfirmPassword': ConfirmPassword
-      };
-
-      Navigator.of(context).pushNamed(
-        '/',
-      );
-    }
-  }
+  TextEditingController _email = TextEditingController();
+  TextEditingController _cpf = TextEditingController();
+  TextEditingController _password = TextEditingController();
+  TextEditingController _confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +116,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                                       },
                                                       onChanged: (value) {
                                                         setState(() {
-                                                          email = value;
+                                                          _email.text = value;
                                                         });
                                                       },
                                                       fillColor: Colors.white,
@@ -167,7 +152,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                                       },
                                                       onChange: (value) {
                                                         setState(() {
-                                                          cpf = value;
+                                                          _cpf.text = value;
                                                         });
                                                       },
                                                       placeholder:
@@ -196,7 +181,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                                           EdgeInsets.fromLTRB(
                                                               15, 0, 0, 0),
                                                       onChange: (value) {
-                                                        password = value;
+                                                        _password.text = value;
                                                       },
                                                       validator: (value) {
                                                         if (value == null ||
@@ -232,14 +217,19 @@ class _CreateAccountState extends State<CreateAccount> {
                                                       validator: (value) {
                                                         if (value == null ||
                                                             value.isEmpty ||
-                                                            value.length < 8 ||
-                                                            value != password) {
+                                                            value.length < 8) {
                                                           return 'senha Invalida!';
+                                                        } else if (_password
+                                                                .text !=
+                                                            _confirmPassword
+                                                                .text) {
+                                                          return 'Senha errada!';
                                                         }
                                                         return null;
                                                       },
                                                       onChange: (value) {
-                                                        ConfirmPassword = value;
+                                                        _confirmPassword.text =
+                                                            value;
                                                       },
                                                       placeholder:
                                                           'Confirme sua Senha',
@@ -252,7 +242,21 @@ class _CreateAccountState extends State<CreateAccount> {
                                                   ),
                                                   InkWell(
                                                     onTap: () {
-                                                      _Register();
+                                                      if (_formKey.currentState!
+                                                          .validate()) {
+                                                        UserController()
+                                                            .Register(
+                                                                _email.text,
+                                                                _cpf.text,
+                                                                _password.text,
+                                                                _confirmPassword
+                                                                    .text);
+
+                                                        Navigator.of(context)
+                                                            .pushNamed(
+                                                          '/',
+                                                        );
+                                                      }
                                                     },
                                                     child: Container(
                                                       margin:

@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_vaga/Constants.dart';
 import 'package:test_vaga/components/input/Input.dart';
 
 import '../../components/input/InputObscure.dart';
+import '../../model/User.dart';
 
 class LoginScreens extends StatefulWidget {
   const LoginScreens({super.key});
@@ -11,6 +16,47 @@ class LoginScreens extends StatefulWidget {
 }
 
 class _LoginScreensState extends State<LoginScreens> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController _LoginPassword = TextEditingController();
+  TextEditingController _LoginEmail = TextEditingController();
+
+  Login() async {
+    String mail = _LoginEmail.text;
+    String password = _LoginPassword.text;
+
+    User savedUser = await _getSavedUser();
+
+    print(savedUser.toJson());
+
+    if (mail == savedUser.email && password == savedUser.password) {
+      Navigator.of(context).pushNamed(
+        '/HomeScreen',
+      );
+    } else {
+      print('aqui foi');
+
+      SnackBar(
+        content: Container(
+          color: Colors.red,
+          height: 200,
+          child: Text("Aceite todos os termos de Politica e Privacidade"),
+        ),
+      );
+    }
+  }
+
+  Future<User> _getSavedUser() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? jsonUser = prefs.getString(PreferencesKeys.activeUser);
+
+    Map<String, dynamic> mapUser = json.decode(jsonUser.toString());
+
+    User user = User.fromJson(mapUser);
+
+    return user;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -26,6 +72,8 @@ class _LoginScreensState extends State<LoginScreens> {
                           child: Column(
                             children: [
                               SingleChildScrollView(
+                                  child: Form(
+                                key: _formKey,
                                 child: Container(
                                     padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
                                     width: size.width * 0.3,
@@ -60,13 +108,21 @@ class _LoginScreensState extends State<LoginScreens> {
                                           child: Input(
                                             textStyle:
                                                 TextStyle(color: Colors.black),
-                                            controller: null,
-                                            initialValue: null,
                                             keyboardType: TextInputType.text,
-                                            onChanged: (value) {},
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'E-mail inválido!';
+                                              }
+                                              return null;
+                                            },
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _LoginEmail.text = value;
+                                              });
+                                            },
                                             fillColor: Colors.white,
                                             filled: true,
-                                            autofocus: false,
                                             obscureText: false,
                                             placeholder: "Digite o Email",
                                             hintStyle: TextStyle(
@@ -89,9 +145,17 @@ class _LoginScreensState extends State<LoginScreens> {
                                                 TextStyle(color: Colors.black),
                                             contentPadding: EdgeInsets.fromLTRB(
                                                 15, 0, 0, 0),
-                                            controller: null,
-                                            onChange: (value) {},
-                                            validator: null,
+                                            onChange: (value) {
+                                              _LoginPassword.text = value;
+                                            },
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty ||
+                                                  value.length < 8) {
+                                                return 'senha Invalida!';
+                                              }
+                                              return null;
+                                            },
                                             placeholder: 'Digite sua Senha',
                                             hintStyle: TextStyle(
                                                 color: Colors.black,
@@ -101,9 +165,10 @@ class _LoginScreensState extends State<LoginScreens> {
                                         ),
                                         InkWell(
                                           onTap: () {
-                                            Navigator.of(context).pushNamed(
-                                              '/HomeScreen',
-                                            );
+                                            if (_formKey.currentState!
+                                                .validate()) {
+                                              Login();
+                                            }
                                           },
                                           child: Container(
                                             margin: EdgeInsets.only(top: 20),
@@ -150,7 +215,7 @@ class _LoginScreensState extends State<LoginScreens> {
                                         )
                                       ],
                                     )),
-                              )
+                              ))
                             ],
                           ),
                         ),
