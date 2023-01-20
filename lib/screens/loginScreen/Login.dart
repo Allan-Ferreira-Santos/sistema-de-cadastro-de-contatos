@@ -34,14 +34,6 @@ class _LoginScreensState extends State<LoginScreens> {
       );
     } else {
       print('aqui foi');
-
-      SnackBar(
-        content: Container(
-          color: Colors.red,
-          height: 200,
-          child: Text("Aceite todos os termos de Politica e Privacidade"),
-        ),
-      );
     }
   }
 
