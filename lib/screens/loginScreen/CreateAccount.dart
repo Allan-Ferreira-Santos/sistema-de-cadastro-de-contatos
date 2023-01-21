@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:test_vaga/components/input/InputCpf.dart';
 import 'package:test_vaga/controllers/UserController.dart';
@@ -17,10 +15,10 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   final _formKey = GlobalKey<FormState>();
 
-  TextEditingController _email = TextEditingController();
-  TextEditingController _cpf = TextEditingController();
-  TextEditingController _password = TextEditingController();
-  TextEditingController _confirmPassword = TextEditingController();
+  TextEditingController mail = TextEditingController();
+  TextEditingController cpf = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +29,7 @@ class _CreateAccountState extends State<CreateAccount> {
           child: Container(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
               width: size.width * 0.3,
-              height: size.height * 0.8,
+              height: size.height * 0.88,
               decoration: const BoxDecoration(
                   color: Colors.black45,
                   borderRadius: BorderRadius.all(Radius.circular(8))),
@@ -91,11 +89,10 @@ class _CreateAccountState extends State<CreateAccount> {
                                   if (value == null || value.isEmpty) {
                                     return 'E-mail inválido!';
                                   }
-                                  return null;
                                 },
                                 onChanged: (value) {
                                   setState(() {
-                                    _email.text = value;
+                                    mail.text = value;
                                   });
                                 },
                                 fillColor: Colors.white,
@@ -127,7 +124,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 },
                                 onChange: (value) {
                                   setState(() {
-                                    _cpf.text = value;
+                                    cpf.text = value;
                                   });
                                 },
                                 placeholder: 'Digite seu CPF',
@@ -151,7 +148,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 contentPadding:
                                     const EdgeInsets.fromLTRB(15, 0, 0, 0),
                                 onChange: (value) {
-                                  _password.text = value;
+                                  password.text = value;
                                 },
                                 validator: (value) {
                                   if (value == null ||
@@ -184,14 +181,14 @@ class _CreateAccountState extends State<CreateAccount> {
                                       value.isEmpty ||
                                       value.length < 8) {
                                     return 'senha Invalida!';
-                                  } else if (_password.text !=
-                                      _confirmPassword.text) {
+                                  } else if (password.text !=
+                                      confirmPassword.text) {
                                     return 'Senha errada!';
                                   }
                                   return null;
                                 },
                                 onChange: (value) {
-                                  _confirmPassword.text = value;
+                                  confirmPassword.text = value;
                                 },
                                 placeholder: 'Confirme sua Senha',
                                 hintStyle: const TextStyle(
@@ -203,11 +200,8 @@ class _CreateAccountState extends State<CreateAccount> {
                             InkWell(
                               onTap: () {
                                 if (_formKey.currentState!.validate()) {
-                                  UserController().register(
-                                      _email.text,
-                                      _cpf.text,
-                                      _password.text,
-                                      _confirmPassword.text);
+                                  UserController().register(mail.text, cpf.text,
+                                      password.text, confirmPassword.text);
 
                                   Navigator.of(context).pushNamed(
                                     '/',

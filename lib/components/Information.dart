@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:test_vaga/models/Contact.dart';
 
 class InformationContacts extends StatefulWidget {
   late List? contacts;
@@ -14,16 +13,16 @@ class _InformationContactsState extends State<InformationContacts> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Container(
+    return SizedBox(
       child: Column(
         children: [
           for (var i = 0; i < widget.contacts!.length; i++) ...[
-            Container(
+            SizedBox(
               child: Row(
                 children: [
-                  Expanded(
+                  const Expanded(
                     flex: 1,
-                    child: Container(
+                    child: SizedBox(
                       child: CircleAvatar(
                         backgroundColor: Colors.red,
                       ),
@@ -31,30 +30,30 @@ class _InformationContactsState extends State<InformationContacts> {
                   ),
                   Expanded(
                     flex: 10,
-                    child: Container(
+                    child: SizedBox(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            padding: EdgeInsets.only(left: 20),
+                            padding: const EdgeInsets.only(left: 20),
                             child: Text(widget.contacts![i]["name"]),
                           ),
                           Container(
-                            padding: EdgeInsets.only(left: 20),
+                            padding: const EdgeInsets.only(left: 20),
                             child: Text(widget.contacts![i]["cpf"]),
                           ),
                         ],
                       ),
                     ),
                   ),
-                  Expanded(
+                  const Expanded(
                       flex: 1,
-                      child: Container(
+                      child: SizedBox(
                         child: Icon(Icons.edit),
                       )),
-                  Expanded(
+                  const Expanded(
                       flex: 1,
-                      child: Container(
+                      child: SizedBox(
                         child: Icon(Icons.delete_outline),
                       ))
                 ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_vaga/components/input/Input.dart';
+import 'package:test_vaga/helpers/Validator.dart';
 
 import '../../components/input/InputObscure.dart';
 import '../../controllers/UserController.dart';
@@ -59,9 +60,7 @@ class _LoginScreensState extends State<LoginScreens> {
                     textStyle: const TextStyle(color: Colors.black),
                     keyboardType: TextInputType.text,
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'E-mail inválido!';
-                      }
+                      Validator().emailValidator(value);
                       return null;
                     },
                     onChanged: (value) {
