@@ -16,12 +16,21 @@ class ContactController {
     var url = 'https://viacep.com.br/ws/$cep/json/';
 
     var response = await Request().request(typeRequest: true, url: url);
+/* 
+    log(response.toString()); */
 
-    if (response['success']) {
+    log("teste" + response['response']['erro'].toString());
+
+    if (response['response']['erro'] != true) {
       data["bairro"] = response['response']['bairro'];
       data["logradouro"] = response['response']['logradouro'];
       data["localidade"] = response['response']['localidade'];
       data["uf"] = response['response']['uf'];
+      data['cepError'] = false;
+      data['success'] = true;
+    } else {
+      data['cepError'] = true;
+      data['success'] = false;
     }
     return data;
   }

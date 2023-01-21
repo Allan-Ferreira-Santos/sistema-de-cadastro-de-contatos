@@ -18,6 +18,8 @@ class _ContactRegisterState extends State<ContactRegister> {
   final _formKey = GlobalKey<FormState>();
 
   bool result = false;
+  bool errorRegisterContact = false;
+  bool errorSearchZip = false;
 
   final mail = TextEditingController();
   final nome = TextEditingController();
@@ -225,6 +227,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                             flex: 5,
                                             child: SizedBox(
                                               child: Input(
+                                                maxLength: 8,
                                                 textStyle: const TextStyle(
                                                     color: Colors.black),
                                                 keyboardType:
@@ -260,28 +263,44 @@ class _ContactRegisterState extends State<ContactRegister> {
                                               flex: 2,
                                               child: InkWell(
                                                 onTap: () async {
-                                                  Map<String, dynamic> data = {
-                                                    'cep': zip.text,
-                                                  };
+                                                  if (zip.text.length > 0) {
+                                                    Map<String, dynamic> data =
+                                                        {
+                                                      'cep': zip.text,
+                                                    };
 
-                                                  Map<String, dynamic>
-                                                      responseZip =
-                                                      await ContactController()
-                                                          .searchZip(data);
+                                                    Map<String, dynamic>
+                                                        responseZip =
+                                                        await ContactController()
+                                                            .searchZip(data);
 
-                                                  log(responseZip.toString());
+                                                    log(responseZip.toString());
 
-                                                  if (responseZip.isNotEmpty) {
+                                                    if (responseZip[
+                                                            'success'] ==
+                                                        true) {
+                                                      setState(() {
+                                                        errorSearchZip = false;
+
+                                                        district.text =
+                                                            responseZip[
+                                                                'bairro'];
+                                                        address.text =
+                                                            responseZip[
+                                                                'logradouro'];
+                                                        city.text = responseZip[
+                                                            'localidade'];
+                                                        uf.text =
+                                                            responseZip['uf'];
+                                                      });
+                                                    } else {
+                                                      setState(() {
+                                                        errorSearchZip = true;
+                                                      });
+                                                    }
+                                                  } else {
                                                     setState(() {
-                                                      district.text =
-                                                          responseZip['bairro'];
-                                                      address.text =
-                                                          responseZip[
-                                                              'logradouro'];
-                                                      city.text = responseZip[
-                                                          'localidade'];
-                                                      uf.text =
-                                                          responseZip['uf'];
+                                                      errorSearchZip = true;
                                                     });
                                                   }
                                                 },
@@ -315,6 +334,19 @@ class _ContactRegisterState extends State<ContactRegister> {
                                         ],
                                       ),
                                     ),
+                                    if (errorSearchZip) ...[
+                                      Container(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        width: size.width,
+                                        child: const Text(
+                                          'Cep não encontrado',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      )
+                                    ],
                                     Container(
                                       padding: const EdgeInsets.only(
                                           bottom: 10, top: 10),
@@ -388,6 +420,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                     ),
                                     SizedBox(
                                       child: Input(
+                                        maxLength: 5,
                                         textStyle: const TextStyle(
                                             color: Colors.black),
                                         keyboardType: TextInputType.text,
@@ -509,6 +542,19 @@ class _ContactRegisterState extends State<ContactRegister> {
                                                 15, 0, 0, 0),
                                       ),
                                     ),
+                                    if (errorRegisterContact) ...[
+                                      Container(
+                                        padding: const EdgeInsets.only(top: 10),
+                                        width: size.width,
+                                        child: const Text(
+                                          'Email ou cpf ja cadastrado',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.w700),
+                                        ),
+                                      )
+                                    ],
                                     InkWell(
                                       onTap: () async {
                                         if (_formKey.currentState!.validate()) {
@@ -530,6 +576,18 @@ class _ContactRegisterState extends State<ContactRegister> {
                                                   .saveContact(contact);
 
                                           log(response.toString());
+
+                                          if (response['success'] == true) {
+                                            Navigator.of(context)
+                                                .pushNamedAndRemoveUntil(
+                                              '/HomeScreen',
+                                              (route) => false,
+                                            );
+                                          } else {
+                                            setState(() {
+                                              errorRegisterContact = true;
+                                            });
+                                          }
                                         }
                                       },
                                       child: Container(

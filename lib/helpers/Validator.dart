@@ -31,4 +31,60 @@ class Validator {
     }
     return null;
   }
+
+  nomeValidator(nome) {
+    if (nome == null || nome.isEmpty || nome.length < 4) {
+      return 'nome inválido';
+    }
+    return null;
+  }
+
+  phoneValidator(phone) {
+    if (phone == null || phone.isEmpty || phone.length < 14) {
+      return 'Telefone inválido';
+    }
+    return null;
+  }
+
+  cepValidator(cep) {
+    if (cep == null || cep.isEmpty || cep.length < 8) {
+      return 'cep inválido';
+    }
+    return null;
+  }
+
+  districtValidator(district) {
+    if (district == null || district.isEmpty) {
+      return 'bairro inválido';
+    }
+    return null;
+  }
+
+  addressValidator(address) {
+    if (address == null || address.isEmpty) {
+      return 'Endereço inválido';
+    }
+    return null;
+  }
+
+  numberValidator(number) {
+    if (number == null || number.isEmpty) {
+      return 'Numero inválido';
+    }
+    return null;
+  }
+
+  cityValidator(city) {
+    if (city == null || city.isEmpty) {
+      return 'Cidade inválido';
+    }
+    return null;
+  }
+
+  ufValidator(uf) {
+    if (uf == null || uf.isEmpty) {
+      return 'uf inválido';
+    }
+    return null;
+  }
 }
