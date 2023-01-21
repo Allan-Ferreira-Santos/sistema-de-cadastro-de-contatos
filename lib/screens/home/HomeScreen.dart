@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:test_vaga/components/information.dart';
+import 'package:test_vaga/components/Information.dart';
+import 'package:test_vaga/controllers/ContactController.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -10,6 +13,25 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? search;
+  List? contacts;
+
+  void initState() {
+    initialSetup();
+    super.initState();
+  }
+
+  /*
+  * Initial setup
+  * @author  SGV
+  * @version 1.0 - 20220111 - initial release
+  * @return  void
+  */
+  Future<void> initialSetup() async {
+    contacts = await ContactController().getContacts();
+
+    log(contacts.toString());
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,9 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    Container(
-                      child: information(),
-                    ),
+                    Container(child: InformationContacts(contacts: contacts)),
                   ],
                 ),
               ),

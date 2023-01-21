@@ -39,18 +39,18 @@ class Contact {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['email'] = this.email;
-    data['name'] = this.name;
-    data['phone'] = this.phone;
-    data['cpf'] = this.cpf;
-    data['zip'] = this.zip;
-    data['district'] = this.district;
-    data['address'] = this.address;
-    data['number'] = this.number;
-    data['city'] = this.city;
-    data['uf'] = this.uf;
-    data['complement'] = this.complement;
+    final Map<String, dynamic> data = {};
+    data['email'] = email;
+    data['name'] = name;
+    data['phone'] = phone;
+    data['cpf'] = cpf;
+    data['zip'] = zip;
+    data['district'] = district;
+    data['address'] = address;
+    data['number'] = number;
+    data['city'] = city;
+    data['uf'] = uf;
+    data['complement'] = complement;
     return data;
   }
 }

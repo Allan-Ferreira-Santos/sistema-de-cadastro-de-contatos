@@ -20,6 +20,7 @@ class Input extends StatefulWidget {
       this.maxLength,
       this.inputFormatters,
       this.textStyle,
+      this.enabled,
       Key? key});
 
   final TextEditingController? controller;
@@ -38,6 +39,7 @@ class Input extends StatefulWidget {
   int? maxLength;
   dynamic inputFormatters;
   TextStyle? textStyle;
+  bool? enabled;
 
   @override
   State<Input> createState() => _InputState();
@@ -48,6 +50,7 @@ class _InputState extends State<Input> {
   Widget build(BuildContext context) {
     return TextFormField(
         style: widget.textStyle,
+        enabled: widget.enabled,
         key: widget.key,
         controller: widget.controller,
         initialValue: widget.initialValue,
