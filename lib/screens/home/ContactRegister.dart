@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_vaga/controllers/ContactController.dart';
-import 'package:test_vaga/models/Contact.dart';
 
 import '../../components/input/Input.dart';
 import '../../components/input/InputCpf.dart';
@@ -22,18 +19,17 @@ class _ContactRegisterState extends State<ContactRegister> {
 
   bool result = false;
 
-  String? district;
-  String? address;
-  String? city;
-  String? uf;
-  String? complement;
-  String? number;
-
-  final _email = TextEditingController();
-  final _nome = TextEditingController();
-  final _phone = TextEditingController();
-  final _cpf = TextEditingController();
+  final mail = TextEditingController();
+  final nome = TextEditingController();
+  final phone = TextEditingController();
+  final cpf = TextEditingController();
   final zip = TextEditingController();
+  final district = TextEditingController();
+  final address = TextEditingController();
+  final city = TextEditingController();
+  final uf = TextEditingController();
+  final complement = TextEditingController();
+  final number = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +106,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                     },
                                     onChanged: (value) {
                                       setState(() {
-                                        _email.text = value;
+                                        mail.text = value;
                                       });
                                     },
                                     fillColor: Colors.white,
@@ -143,7 +139,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                     },
                                     onChanged: (value) {
                                       setState(() {
-                                        _nome.text = value;
+                                        nome.text = value;
                                       });
                                     },
                                     fillColor: Colors.white,
@@ -173,7 +169,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                   },
                                   onChange: (value) {
                                     setState(() {
-                                      _phone.text = value;
+                                      phone.text = value;
                                     });
                                   },
                                   placeholder: 'Digite seu número com DDD',
@@ -201,7 +197,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                     },
                                     onChange: (value) {
                                       setState(() {
-                                        _cpf.text = value;
+                                        cpf.text = value;
                                       });
                                     },
                                     placeholder: 'Digite seu CPF',
@@ -213,7 +209,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                         const EdgeInsets.fromLTRB(15, 0, 0, 0),
                                   ),
                                 ),
-                                Container(
+                                SizedBox(
                                     child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -222,19 +218,22 @@ class _ContactRegisterState extends State<ContactRegister> {
                                           bottom: 10, top: 10),
                                       child: const Text('Cep'),
                                     ),
-                                    Container(
+                                    SizedBox(
                                       child: Row(
                                         children: [
                                           Expanded(
                                             flex: 5,
-                                            child: Container(
+                                            child: SizedBox(
                                               child: Input(
-                                                controller: zip,
                                                 textStyle: const TextStyle(
                                                     color: Colors.black),
                                                 keyboardType:
                                                     TextInputType.text,
-                                                onChanged: (value) {},
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    zip.text = value;
+                                                  });
+                                                },
                                                 fillColor: Colors.white,
                                                 validator: (value) {
                                                   if (value == null ||
@@ -274,13 +273,15 @@ class _ContactRegisterState extends State<ContactRegister> {
 
                                                   if (responseZip.isNotEmpty) {
                                                     setState(() {
-                                                      district =
+                                                      district.text =
                                                           responseZip['bairro'];
-                                                      address = responseZip[
-                                                          'logradouro'];
-                                                      city = responseZip[
+                                                      address.text =
+                                                          responseZip[
+                                                              'logradouro'];
+                                                      city.text = responseZip[
                                                           'localidade'];
-                                                      uf = responseZip['uf'];
+                                                      uf.text =
+                                                          responseZip['uf'];
                                                     });
                                                   }
                                                 },
@@ -322,7 +323,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                     SizedBox(
                                       child: Input(
                                         controller: TextEditingController(
-                                            text: district),
+                                            text: district.text),
                                         enabled: false,
                                         textStyle: const TextStyle(
                                             color: Colors.black),
@@ -356,7 +357,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                       child: Input(
                                         enabled: false,
                                         controller: TextEditingController(
-                                            text: address),
+                                            text: address.text),
                                         textStyle: const TextStyle(
                                             color: Colors.black),
                                         keyboardType: TextInputType.text,
@@ -392,7 +393,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                         keyboardType: TextInputType.text,
                                         onChanged: (value) {
                                           setState(() {
-                                            number = value;
+                                            number.text = value;
                                           });
                                         },
                                         fillColor: Colors.white,
@@ -421,8 +422,8 @@ class _ContactRegisterState extends State<ContactRegister> {
                                     ),
                                     SizedBox(
                                       child: Input(
-                                        controller:
-                                            TextEditingController(text: city),
+                                        controller: TextEditingController(
+                                            text: city.text),
                                         enabled: false,
                                         textStyle: const TextStyle(
                                             color: Colors.black),
@@ -454,8 +455,8 @@ class _ContactRegisterState extends State<ContactRegister> {
                                     ),
                                     SizedBox(
                                       child: Input(
-                                        controller:
-                                            TextEditingController(text: uf),
+                                        controller: TextEditingController(
+                                            text: uf.text),
                                         enabled: false,
                                         textStyle: const TextStyle(
                                             color: Colors.black),
@@ -492,7 +493,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                         keyboardType: TextInputType.text,
                                         onChanged: (value) {
                                           setState(() {
-                                            complement = value;
+                                            complement.text = value;
                                           });
                                         },
                                         fillColor: Colors.white,
@@ -512,16 +513,17 @@ class _ContactRegisterState extends State<ContactRegister> {
                                       onTap: () async {
                                         if (_formKey.currentState!.validate()) {
                                           Map<String, dynamic> contact = {};
-                                          contact['city'] = city;
-                                          contact['address'] = address;
-                                          contact['complement'] = complement;
-                                          contact['cpf'] = _cpf.text;
-                                          contact['district'] = district;
-                                          contact['email'] = _email.text;
-                                          contact['name'] = _nome.text;
-                                          contact['number'] = number;
-                                          contact['phone'] = _phone.text;
-                                          contact['uf'] = uf;
+                                          contact['city'] = city.text;
+                                          contact['address'] = address.text;
+                                          contact['complement'] =
+                                              complement.text;
+                                          contact['cpf'] = cpf.text;
+                                          contact['district'] = district.text;
+                                          contact['email'] = mail.text;
+                                          contact['name'] = nome.text;
+                                          contact['number'] = number.text;
+                                          contact['phone'] = phone.text;
+                                          contact['uf'] = uf.text;
 
                                           Map<String, dynamic> response =
                                               await ContactController()

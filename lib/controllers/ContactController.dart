@@ -4,7 +4,6 @@ import 'dart:developer';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_vaga/Constants.dart';
 import 'package:test_vaga/helpers/Request.dart';
-import 'package:test_vaga/models/Contact.dart';
 
 class ContactController {
   searchZip(Map<String, dynamic> responseZip) async {
@@ -34,6 +33,7 @@ class ContactController {
    * @version 1.0 - 20230112 - initial release
    * @return  bool
    */
+
   Future<bool> canTheDataBeSaved(Map<String, dynamic> data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
