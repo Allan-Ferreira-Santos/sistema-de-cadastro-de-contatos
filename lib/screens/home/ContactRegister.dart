@@ -1,14 +1,19 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:test_vaga/Constants.dart';
 import 'package:test_vaga/controllers/ContactController.dart';
 
 import '../../components/input/Input.dart';
 import '../../components/input/InputCpf.dart';
 import '../../components/input/InputPhone.dart';
+import '../../helpers/FunctionsClass.dart';
 
 class ContactRegister extends StatefulWidget {
-  const ContactRegister({super.key});
+  final Map<String, dynamic>? currentContact;
+
+  const ContactRegister({Key? key, this.currentContact}) : super(key: key);
 
   @override
   State<ContactRegister> createState() => _ContactRegisterState();
@@ -20,6 +25,7 @@ class _ContactRegisterState extends State<ContactRegister> {
   bool result = false;
   bool errorRegisterContact = false;
   bool errorSearchZip = false;
+  bool edit = false;
 
   final mail = TextEditingController();
   final nome = TextEditingController();
@@ -32,6 +38,41 @@ class _ContactRegisterState extends State<ContactRegister> {
   final uf = TextEditingController();
   final complement = TextEditingController();
   final number = TextEditingController();
+
+  @override
+  void initState() {
+    if (widget.currentContact != null) {
+      mail.text = widget.currentContact!['email'];
+      nome.text = widget.currentContact!['name'];
+      phone.text = widget.currentContact!['phone'];
+      cpf.text = widget.currentContact!['cpf'];
+      zip.text = widget.currentContact!['zip'];
+      district.text = widget.currentContact!['district'];
+      address.text = widget.currentContact!['address'];
+      city.text = widget.currentContact!['city'];
+      uf.text = widget.currentContact!['uf'];
+      complement.text = widget.currentContact!['complement'];
+      number.text = widget.currentContact!['number'];
+      edit = true;
+    }
+    initialSetup();
+    super.initState();
+  }
+
+  /*
+  * Initial setup
+  * @author  SGV
+  * @version 1.0 - 20220111 - initial release
+  * @return  void
+  */
+
+  Future<void> initialSetup() async {
+    if (!await FunctionsClass().verifyInternalUrl()) {
+      Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+    }
+
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +138,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                 ),
                                 SizedBox(
                                   child: Input(
+                                    initialValue: mail.text,
                                     textStyle:
                                         const TextStyle(color: Colors.black),
                                     keyboardType: TextInputType.text,
@@ -130,6 +172,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                 ),
                                 SizedBox(
                                   child: Input(
+                                    initialValue: nome.text,
                                     textStyle:
                                         const TextStyle(color: Colors.black),
                                     keyboardType: TextInputType.text,
@@ -163,6 +206,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                 ),
                                 SizedBox(
                                     child: InputPhone(
+                                  initialValue: phone.text,
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Telefone inválido!';
@@ -189,6 +233,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                 ),
                                 SizedBox(
                                   child: InputCpf(
+                                    initialValue: cpf.text,
                                     validator: (value) {
                                       if (value == null ||
                                           value.isEmpty ||
@@ -227,6 +272,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                             flex: 5,
                                             child: SizedBox(
                                               child: Input(
+                                                initialValue: zip.text,
                                                 maxLength: 8,
                                                 textStyle: const TextStyle(
                                                     color: Colors.black),
@@ -420,6 +466,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                     ),
                                     SizedBox(
                                       child: Input(
+                                        initialValue: number.text,
                                         maxLength: 5,
                                         textStyle: const TextStyle(
                                             color: Colors.black),
@@ -521,6 +568,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                     ),
                                     SizedBox(
                                       child: Input(
+                                        initialValue: complement.text,
                                         textStyle: const TextStyle(
                                             color: Colors.black),
                                         keyboardType: TextInputType.text,
@@ -568,25 +616,35 @@ class _ContactRegisterState extends State<ContactRegister> {
                                           contact['email'] = mail.text;
                                           contact['name'] = nome.text;
                                           contact['number'] = number.text;
+                                          contact['zip'] = zip.text;
                                           contact['phone'] = phone.text;
                                           contact['uf'] = uf.text;
-
-                                          Map<String, dynamic> response =
-                                              await ContactController()
-                                                  .saveContact(contact);
-
-                                          log(response.toString());
-
-                                          if (response['success'] == true) {
+                                          if (edit) {
+                                            await ContactController()
+                                                .edit(contact);
                                             Navigator.of(context)
                                                 .pushNamedAndRemoveUntil(
                                               '/HomeScreen',
                                               (route) => false,
                                             );
                                           } else {
-                                            setState(() {
-                                              errorRegisterContact = true;
-                                            });
+                                            Map<String, dynamic> response =
+                                                await ContactController()
+                                                    .saveContact(contact, edit);
+
+                                            log(response.toString());
+
+                                            if (response['success'] == true) {
+                                              Navigator.of(context)
+                                                  .pushNamedAndRemoveUntil(
+                                                '/HomeScreen',
+                                                (route) => false,
+                                              );
+                                            } else {
+                                              setState(() {
+                                                errorRegisterContact = true;
+                                              });
+                                            }
                                           }
                                         }
                                       },

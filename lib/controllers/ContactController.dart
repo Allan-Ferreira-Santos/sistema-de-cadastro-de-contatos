@@ -1,9 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:geocode/geocode.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_vaga/Constants.dart';
 import 'package:test_vaga/helpers/Request.dart';
+import 'package:latlong2/latlong.dart';
 
 class ContactController {
   searchZip(Map<String, dynamic> responseZip) async {
@@ -16,10 +20,7 @@ class ContactController {
     var url = 'https://viacep.com.br/ws/$cep/json/';
 
     var response = await Request().request(typeRequest: true, url: url);
-/* 
-    log(response.toString()); */
-
-    log("teste" + response['response']['erro'].toString());
+    log(response.toString());
 
     if (response['response']['erro'] != true) {
       data["bairro"] = response['response']['bairro'];
@@ -43,7 +44,7 @@ class ContactController {
    * @return  bool
    */
 
-  Future<bool> canTheDataBeSaved(Map<String, dynamic> data) async {
+  Future<bool> canTheDataBeSaved(Map<String, dynamic> data) async { 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String? response = prefs.getString(PreferencesKeys.contact);
@@ -62,7 +63,8 @@ class ContactController {
     return true;
   }
 
-  Future<Map<String, dynamic>> saveContact(Map<String, dynamic> data) async {
+  Future<Map<String, dynamic>> saveContact(
+      Map<String, dynamic> data, bool edit) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List contacts = [];
     Map<String, dynamic> result = {'success': false};
@@ -72,6 +74,8 @@ class ContactController {
       result['checkContact'] = true;
       return result;
     }
+
+    data = await createCoordinatesContact(data);
 
     if (response != null && response.isNotEmpty) {
       contacts = json.decode(response);
@@ -87,6 +91,25 @@ class ContactController {
     return result;
   }
 
+  Future<void> edit(Map<String, dynamic> data) async {
+    List contacts = [];
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? response = prefs.getString(PreferencesKeys.contact);
+
+    contacts = json.decode(response!);
+
+    for (var i = 0; i < contacts.length; i++) {
+      Map<String, dynamic> currentContact = contacts[i];
+
+      if (currentContact['cpf'] == data['cpf']) {
+        data = await createCoordinatesContact(data);
+        contacts[i] = data;
+        await prefs.setString(PreferencesKeys.contact, jsonEncode(contacts));
+      }
+    }
+  }
+
   Future<List> getContacts() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List contacts = [];
@@ -96,5 +119,93 @@ class ContactController {
     contacts = response != null ? jsonDecode(response) : [];
 
     return contacts;
+  }
+
+  Future createLocalization() async {}
+
+  /*
+   * create coordinates specific of contact
+   * @author  SGV
+   * @param <Map<String,dynamic>> data - data of Contact 
+   * @version 1.0 - 20230116 - initial release
+   */
+  Future<Map<String, dynamic>> createCoordinatesContact(
+      Map<String, dynamic> data) async {
+    String addrees = data['address'] +
+        ' ' +
+        data['number'] +
+        ', ' +
+        data['district'] +
+        ', ' +
+        data['city'];
+
+    GeoCode geoCode = GeoCode();
+    try {
+      Coordinates coordinates =
+          await geoCode.forwardGeocoding(address: addrees);
+      data['coordinates'] = {
+        'Latitude': coordinates.latitude,
+        'Longitude': coordinates.longitude
+      };
+    } catch (e) {
+      data['coordinates'] = {
+        'Latitude': '0',
+        'Longitude': '0',
+      };
+    }
+    log('##################');
+    log(data.toString());
+    return data;
+  }
+
+  /*
+  * All markers contacts
+  * @author  SGV
+  * @param <List> contacts - all contacts
+  * @version 1.0 - 20230116 - initial release
+  */
+  Future<List<Marker>> allMarkersContancts(List contacts) async {
+    List<Marker> markers = [];
+    for (var contact = 0; contact < contacts.length; contact++) {
+      Map<String, dynamic> coordinates = contacts[contact]['coordinates'];
+
+      markers.add(
+        Marker(
+          width: 100,
+          height: 100,
+          point: LatLng(double.parse(coordinates['Latitude'].toString()),
+              double.parse(coordinates['Longitude'].toString())),
+          builder: (ctx) => const Icon(
+            Icons.add_location_sharp,
+            color: Colors.green,
+          ),
+          // anchorPos: anchorPos,
+        ),
+      );
+    }
+    return markers;
+  }
+
+  /*
+   * Delete contact
+   * @author  SGV
+   * @param <String> id - id of Contact 
+   * @version 1.0 - 20230112 - initial release
+   */
+  Future<void> deleteContact(String id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List contacts = [];
+
+    String? response = prefs.getString(PreferencesKeys.contact);
+
+    contacts = jsonDecode(response!);
+
+    for (var contact = 0; contact < contacts.length; contact++) {
+      Map<String, dynamic> currentContact = contacts[contact];
+      if (id == currentContact['cpf']) {
+        contacts.removeAt(contact);
+      }
+    }
+    prefs.setString(PreferencesKeys.contact, jsonEncode(contacts));
   }
 }

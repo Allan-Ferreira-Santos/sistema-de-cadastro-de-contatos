@@ -7,6 +7,24 @@ import '../models/User.dart';
 
 class UserController {
   /*
+   * Logout
+   * @author  SGV
+   * @version 1.0 - 20230116 - initial release
+   * @return  bool
+   */
+
+  Future<bool> logout(String password) async {
+    User savedUser = await getSavedUser();
+    final prefs = await SharedPreferences.getInstance();
+
+    if (savedUser.password == password) {
+      await prefs.clear();
+      return true;
+    }
+    return false;
+  }
+
+  /*
   * Register new User
   * @author  Allan F Santos
   * @version 1.0 - 20230120 - initial release
@@ -62,6 +80,9 @@ class UserController {
         response['password'] == savedUser.password) {
       data['loginError'] = false;
       data['success'] = true;
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setBool(PreferencesKeys.firstRun, true);
     } else {
       data['loginError'] = true;
       data['success'] = false;
