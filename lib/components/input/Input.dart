@@ -1,5 +1,3 @@
-// ignore_for_file: file_names, use_key_in_widget_constructors, prefer_typing_uninitialized_variables, must_be_immutable, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 class Input extends StatefulWidget {
@@ -69,19 +67,19 @@ class _InputState extends State<Input> {
           hintStyle: widget.hintStyle,
           contentPadding: widget.contentPadding,
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 1),
+            borderSide: const BorderSide(color: Colors.white, width: 1),
             borderRadius: BorderRadius.circular(8),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 1),
+            borderSide: const BorderSide(color: Colors.white, width: 1),
             borderRadius: BorderRadius.circular(8),
           ),
           errorBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 1),
+            borderSide: const BorderSide(color: Colors.red, width: 1),
             borderRadius: BorderRadius.circular(8),
           ),
           border: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black, width: 1),
+            borderSide: const BorderSide(color: Colors.white, width: 1),
             borderRadius: BorderRadius.circular(8),
           ),
         ));

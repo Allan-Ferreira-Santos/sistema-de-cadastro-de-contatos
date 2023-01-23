@@ -1,9 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:test_vaga/components/input/Input.dart';
 import 'package:test_vaga/controllers/UserController.dart';
 
 import '../../components/input/InputObscure.dart';
@@ -22,9 +17,11 @@ class _LogoutScreenState extends State<LogoutScreen> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Color.fromARGB(255, 144, 143, 141),
       title: const Text(
         'Logout',
         textAlign: TextAlign.center,
+        style: TextStyle(fontWeight: FontWeight.w700),
       ),
       content: SingleChildScrollView(
         child: ListBody(
@@ -34,24 +31,27 @@ class _LogoutScreenState extends State<LogoutScreen> {
               style: Theme.of(context).textTheme.subtitle1,
               textAlign: TextAlign.center,
             ),
-            ObscureInput(
-              colorIcon: Colors.black,
-              textStyle: const TextStyle(color: Colors.black),
-              contentPadding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
-              onChange: (value) {
-                password = value;
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty || value.length < 8) {
-                  return 'senha Invalida!';
-                }
-                return null;
-              },
-              placeholder: 'Digite sua Senha',
-              hintStyle: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400),
+            Container(
+              padding: const EdgeInsets.only(top: 20),
+              child: ObscureInput(
+                colorIcon: Colors.black,
+                textStyle: const TextStyle(color: Colors.black),
+                contentPadding: const EdgeInsets.fromLTRB(15, 0, 0, 0),
+                onChange: (value) {
+                  password = value;
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty || value.length < 8) {
+                    return 'senha Invalida!';
+                  }
+                  return null;
+                },
+                placeholder: 'Digite sua Senha',
+                hintStyle: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400),
+              ),
             ),
             if (passwordError != true) ...[const Text('Senha Invalida')]
           ],
@@ -62,7 +62,10 @@ class _LogoutScreenState extends State<LogoutScreen> {
           style: TextButton.styleFrom(
             foregroundColor: Colors.red,
           ),
-          child: const Text('Confirmar'),
+          child: const Text(
+            'Confirmar',
+            style: TextStyle(color: Color.fromARGB(255, 22, 216, 28)),
+          ),
           onPressed: () async {
             bool error = await UserController().logout(password!);
             setState(() {

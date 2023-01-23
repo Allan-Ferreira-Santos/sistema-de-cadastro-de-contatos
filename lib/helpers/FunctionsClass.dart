@@ -1,13 +1,11 @@
-import 'dart:developer';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_vaga/Constants.dart';
 
 class FunctionsClass {
-/*
+  /*
    * Verify if login to user
    * @author  Allan F Santos
-   * @version 1.0 - 20230112 - initial release
+   * @version 1.0 - 20230122 - initial release
    * @return  bool
    */
   Future<bool> verifyInternalUrl() async {
@@ -18,6 +16,13 @@ class FunctionsClass {
     }
     return session;
   }
+
+  /*
+  * Delete accent in String
+  * @author  Allan F Santos
+  * @version 1.0 - 20230122 - initial release
+  * @return  String
+  */
 
   static String removeAccents(String str) {
     var withDia =

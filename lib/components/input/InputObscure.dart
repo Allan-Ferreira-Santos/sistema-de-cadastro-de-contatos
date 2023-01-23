@@ -1,5 +1,3 @@
-// ignore_for_file: file_names, must_be_immutable, use_key_in_widget_constructors, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 class ObscureInput extends StatefulWidget {
@@ -59,19 +57,19 @@ class _ObscureInputState extends State<ObscureInput> {
         contentPadding: widget.contentPadding,
         hintStyle: widget.hintStyle,
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black, width: 1),
+          borderSide: const BorderSide(color: Colors.white, width: 1),
           borderRadius: BorderRadius.circular(8),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black, width: 1),
+          borderSide: const BorderSide(color: Colors.white, width: 1),
           borderRadius: BorderRadius.circular(8),
         ),
         errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.black, width: 1),
+          borderSide: const BorderSide(color: Colors.red, width: 1),
           borderRadius: BorderRadius.circular(8),
         ),
         border: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.transparent, width: 0),
+          borderSide: const BorderSide(color: Colors.transparent, width: 0),
           borderRadius: BorderRadius.circular(8),
         ),
       ),

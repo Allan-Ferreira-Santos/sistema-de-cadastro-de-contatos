@@ -24,7 +24,7 @@ class _LoginScreensState extends State<LoginScreens> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: const Color.fromARGB(255, 34, 32, 32),
       body: Center(
           child: Form(
         key: _formKey,
@@ -33,7 +33,7 @@ class _LoginScreensState extends State<LoginScreens> {
             width: size.width * 0.3,
             height: size.height * 0.6,
             decoration: const BoxDecoration(
-                color: Colors.black45,
+                color: Color.fromARGB(255, 144, 143, 141),
                 borderRadius: BorderRadius.all(Radius.circular(8))),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +60,11 @@ class _LoginScreensState extends State<LoginScreens> {
                     textStyle: const TextStyle(color: Colors.black),
                     keyboardType: TextInputType.text,
                     validator: (value) {
-                      Validator().emailValidator(value);
+                      if (Validator().emailValidator(value) != null) {
+                        String response = Validator().emailValidator(value);
+
+                        return response;
+                      }
                       return null;
                     },
                     onChanged: (value) {
@@ -92,8 +96,10 @@ class _LoginScreensState extends State<LoginScreens> {
                       loginPassword.text = value;
                     },
                     validator: (value) {
-                      if (value == null || value.isEmpty || value.length < 8) {
-                        return 'senha Invalida!';
+                      if (Validator().passwordValidator(value) != null) {
+                        String response = Validator().passwordValidator(value);
+
+                        return response;
                       }
                       return null;
                     },

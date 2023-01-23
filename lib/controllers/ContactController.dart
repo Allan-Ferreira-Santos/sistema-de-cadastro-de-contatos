@@ -10,6 +10,14 @@ import 'package:test_vaga/helpers/Request.dart';
 import 'package:latlong2/latlong.dart';
 
 class ContactController {
+  /*
+  * Zip code search
+  * @author  Allan F Santos
+  * @version 1.0 - 20230122 - initial release
+  * @param Map<String, dynamic> responseZip - zip 
+  * @return data
+  */
+
   searchZip(Map<String, dynamic> responseZip) async {
     String cep = responseZip['cep'];
 
@@ -38,13 +46,13 @@ class ContactController {
 
   /*
    * can the data be saved
-   * @author  SGV
+   * @author  Allan F Santos
    * @param <Map<String,dynamic>> data - data contact 
-   * @version 1.0 - 20230112 - initial release
+   * @version 1.0 - 20230122 - initial release
    * @return  bool
    */
 
-  Future<bool> canTheDataBeSaved(Map<String, dynamic> data) async { 
+  Future<bool> canTheDataBeSaved(Map<String, dynamic> data) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String? response = prefs.getString(PreferencesKeys.contact);
@@ -63,10 +71,21 @@ class ContactController {
     return true;
   }
 
+  /*
+   * Save contacts
+   * @author  Allan F Santos
+   * @param <Map<String,dynamic>> data - data contact 
+   * @param bool edit - bool edit contact 
+   * @version 1.0 - 20230121 - initial release
+   * @return  result
+   */
+
   Future<Map<String, dynamic>> saveContact(
       Map<String, dynamic> data, bool edit) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
     List contacts = [];
+
     Map<String, dynamic> result = {'success': false};
     String? response = prefs.getString(PreferencesKeys.contact);
 
@@ -91,6 +110,14 @@ class ContactController {
     return result;
   }
 
+  /*
+   * Edit contacts
+   * @author  Allan F Santos
+   * @param <Map<String,dynamic>> data - data contact 
+   * @version 1.0 - 20230121 - initial release
+   * @return <void>
+   */
+
   Future<void> edit(Map<String, dynamic> data) async {
     List contacts = [];
 
@@ -110,6 +137,13 @@ class ContactController {
     }
   }
 
+  /*
+   * All contacts
+   * @author  Allan F Santos 
+   * @version 1.0 - 20230121 - initial release
+   * @return contacts
+   */
+
   Future<List> getContacts() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List contacts = [];
@@ -121,14 +155,14 @@ class ContactController {
     return contacts;
   }
 
-  Future createLocalization() async {}
-
   /*
    * create coordinates specific of contact
-   * @author  SGV
+   * @author  Allan F Santos
    * @param <Map<String,dynamic>> data - data of Contact 
-   * @version 1.0 - 20230116 - initial release
+   * @version 1.0 - 20230122 - initial release
+   * @return data
    */
+
   Future<Map<String, dynamic>> createCoordinatesContact(
       Map<String, dynamic> data) async {
     String addrees = data['address'] +
@@ -160,10 +194,12 @@ class ContactController {
 
   /*
   * All markers contacts
-  * @author  SGV
+  * @author  Allan F Santos
   * @param <List> contacts - all contacts
-  * @version 1.0 - 20230116 - initial release
+  * @version 1.0 - 20230122 - initial release
+  * @return markers
   */
+
   Future<List<Marker>> allMarkersContancts(List contacts) async {
     List<Marker> markers = [];
     for (var contact = 0; contact < contacts.length; contact++) {
@@ -179,7 +215,6 @@ class ContactController {
             Icons.add_location_sharp,
             color: Colors.green,
           ),
-          // anchorPos: anchorPos,
         ),
       );
     }
@@ -188,10 +223,12 @@ class ContactController {
 
   /*
    * Delete contact
-   * @author  SGV
+   * @author  Allan F Santos
    * @param <String> id - id of Contact 
-   * @version 1.0 - 20230112 - initial release
+   * @version 1.0 - 20230121 - initial release
+   * @return <void>
    */
+
   Future<void> deleteContact(String id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List contacts = [];

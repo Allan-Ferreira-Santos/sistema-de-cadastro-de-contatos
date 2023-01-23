@@ -1,9 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:test_vaga/Constants.dart';
 import 'package:test_vaga/controllers/ContactController.dart';
+import 'package:test_vaga/helpers/Validator.dart';
 
 import '../../components/input/Input.dart';
 import '../../components/input/InputCpf.dart';
@@ -61,8 +60,8 @@ class _ContactRegisterState extends State<ContactRegister> {
 
   /*
   * Initial setup
-  * @author  SGV
-  * @version 1.0 - 20220111 - initial release
+  * @author  Allan F Santos
+  * @version 1.0 - 20230121 - initial release
   * @return  void
   */
 
@@ -78,7 +77,7 @@ class _ContactRegisterState extends State<ContactRegister> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: const Color.fromARGB(255, 34, 32, 32),
         body: Center(
             child: Container(
                 alignment: Alignment.center,
@@ -86,7 +85,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                 width: size.width * 0.3,
                 height: size.height * 0.9,
                 decoration: const BoxDecoration(
-                    color: Colors.black45,
+                    color: Color.fromARGB(255, 144, 143, 141),
                     borderRadius: BorderRadius.all(Radius.circular(8))),
                 child: SingleChildScrollView(
                   child: Column(
@@ -96,34 +95,18 @@ class _ContactRegisterState extends State<ContactRegister> {
                         SizedBox(
                           child: Row(
                             children: [
-                              Expanded(
-                                  flex: 1,
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: const SizedBox(
-                                      child: Icon(
-                                        Icons.chevron_left_outlined,
-                                        size: 30,
-                                      ),
-                                    ),
-                                  )),
-                              Expanded(
-                                  flex: 10,
-                                  child: Container(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 20, top: 20),
-                                    width: size.width,
-                                    child: const Text(
-                                      'Cadastre um novo Contato',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.w700),
-                                    ),
-                                  )),
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(bottom: 30, top: 30),
+                                child: const Text(
+                                  'Cadastre um novo Contato',
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -143,8 +126,12 @@ class _ContactRegisterState extends State<ContactRegister> {
                                         const TextStyle(color: Colors.black),
                                     keyboardType: TextInputType.text,
                                     validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'E-mail inválido!';
+                                      if (Validator().emailValidator(value) !=
+                                          null) {
+                                        String response =
+                                            Validator().emailValidator(value);
+
+                                        return response;
                                       }
                                       return null;
                                     },
@@ -177,8 +164,12 @@ class _ContactRegisterState extends State<ContactRegister> {
                                         const TextStyle(color: Colors.black),
                                     keyboardType: TextInputType.text,
                                     validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return 'Nome inválido!';
+                                      if (Validator().nomeValidator(value) !=
+                                          null) {
+                                        String response =
+                                            Validator().nomeValidator(value);
+
+                                        return response;
                                       }
                                       return null;
                                     },
@@ -208,8 +199,12 @@ class _ContactRegisterState extends State<ContactRegister> {
                                     child: InputPhone(
                                   initialValue: phone.text,
                                   validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return 'Telefone inválido!';
+                                    if (Validator().phoneValidator(value) !=
+                                        null) {
+                                      String response =
+                                          Validator().phoneValidator(value);
+
+                                      return response;
                                     }
                                     return null;
                                   },
@@ -235,10 +230,12 @@ class _ContactRegisterState extends State<ContactRegister> {
                                   child: InputCpf(
                                     initialValue: cpf.text,
                                     validator: (value) {
-                                      if (value == null ||
-                                          value.isEmpty ||
-                                          value.length != 14) {
-                                        return 'CPF inválido!';
+                                      if (Validator().cpfValidator(value) !=
+                                          null) {
+                                        String response =
+                                            Validator().cpfValidator(value);
+
+                                        return response;
                                       }
                                       return null;
                                     },
@@ -285,9 +282,15 @@ class _ContactRegisterState extends State<ContactRegister> {
                                                 },
                                                 fillColor: Colors.white,
                                                 validator: (value) {
-                                                  if (value == null ||
-                                                      value.isEmpty) {
-                                                    return 'Cep inválido!';
+                                                  if (Validator().cepValidator(
+                                                          value) !=
+                                                      null) {
+                                                    String response =
+                                                        Validator()
+                                                            .cepValidator(
+                                                                value);
+
+                                                    return response;
                                                   }
                                                   return null;
                                                 },
@@ -409,8 +412,13 @@ class _ContactRegisterState extends State<ContactRegister> {
                                         onChanged: (value) {},
                                         fillColor: Colors.white,
                                         validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Bairro inválido!';
+                                          if (Validator()
+                                                  .districtValidator(value) !=
+                                              null) {
+                                            String response = Validator()
+                                                .districtValidator(value);
+
+                                            return response;
                                           }
                                           return null;
                                         },
@@ -443,8 +451,13 @@ class _ContactRegisterState extends State<ContactRegister> {
                                         fillColor: Colors.white,
                                         filled: true,
                                         validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Endereço inválido!';
+                                          if (Validator()
+                                                  .addressValidator(value) !=
+                                              null) {
+                                            String response = Validator()
+                                                .addressValidator(value);
+
+                                            return response;
                                           }
                                           return null;
                                         },
@@ -480,8 +493,13 @@ class _ContactRegisterState extends State<ContactRegister> {
                                         filled: true,
                                         obscureText: false,
                                         validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Numero inválido!';
+                                          if (Validator()
+                                                  .numberValidator(value) !=
+                                              null) {
+                                            String response = Validator()
+                                                .numberValidator(value);
+
+                                            return response;
                                           }
                                           return null;
                                         },
@@ -512,8 +530,13 @@ class _ContactRegisterState extends State<ContactRegister> {
                                         fillColor: Colors.white,
                                         filled: true,
                                         validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'Cidade inválido!';
+                                          if (Validator()
+                                                  .cityValidator(value) !=
+                                              null) {
+                                            String response = Validator()
+                                                .cityValidator(value);
+
+                                            return response;
                                           }
                                           return null;
                                         },
@@ -546,8 +569,12 @@ class _ContactRegisterState extends State<ContactRegister> {
                                         filled: true,
                                         obscureText: false,
                                         validator: (value) {
-                                          if (value == null || value.isEmpty) {
-                                            return 'UF inválido!';
+                                          if (Validator().ufValidator(value) !=
+                                              null) {
+                                            String response =
+                                                Validator().ufValidator(value);
+
+                                            return response;
                                           }
                                           return null;
                                         },
@@ -650,7 +677,7 @@ class _ContactRegisterState extends State<ContactRegister> {
                                       },
                                       child: Container(
                                         margin: const EdgeInsets.fromLTRB(
-                                            30, 30, 30, 30),
+                                            0, 30, 0, 20),
                                         padding: const EdgeInsets.all(10),
                                         width: size.width,
                                         decoration: BoxDecoration(
@@ -659,6 +686,29 @@ class _ContactRegisterState extends State<ContactRegister> {
                                                 BorderRadius.circular(20)),
                                         child: const Text(
                                           'Cadastrar',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Container(
+                                        margin:
+                                            const EdgeInsets.only(bottom: 20),
+                                        padding: const EdgeInsets.all(10),
+                                        width: size.width,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(20)),
+                                        child: const Text(
+                                          'Voltar',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontWeight: FontWeight.w700,

@@ -7,9 +7,9 @@ import '../models/User.dart';
 
 class UserController {
   /*
-   * Logout
-   * @author  SGV
-   * @version 1.0 - 20230116 - initial release
+   * Logout user
+   * @author  Allan F Santos
+   * @version 1.0 - 20230122 - initial release
    * @return  bool
    */
 
@@ -27,7 +27,7 @@ class UserController {
   /*
   * Register new User
   * @author  Allan F Santos
-  * @version 1.0 - 20230120 - initial release
+  * @version 1.0 - 20230121 - initial release
   * @param email - email user
   * @param cpf - cpf user
   * @param password - password user
@@ -48,8 +48,8 @@ class UserController {
   /*
   * Get user
   * @author  Allan F Santos
-  * @version 1.0 - 20230120 - initial release
-  * @return User
+  * @version 1.0 - 20230121 - initial release
+  * @return user
   */
 
   Future<User> getSavedUser() async {
@@ -65,11 +65,11 @@ class UserController {
   }
 
   /*
-  * Verify address and password of user
+  * Verify email and password of user
   * @author  Allan F Santos
-  * @version 1.0 - 20230120 - initial release
-  * @param response - data address and password of user
-  * @return Map<String, dynamic>
+  * @version 1.0 - 20230121 - initial release
+  * @param response - data email and password of user
+  * @return data
   */
 
   login(Map<String, dynamic> response) async {
@@ -89,12 +89,18 @@ class UserController {
     }
     return data;
   }
-}
 
-saveUser(User user) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  /*
+  * Save user
+  * @author  Allan F Santos
+  * @param User user - data user
+  * @version 1.0 - 20230121 - initial release
+  * @return <void>
+  */
 
-  prefs.setString(PreferencesKeys.activeUser, json.encode(user.toJson()));
+  saveUser(User user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  print("Salvando Dados" + user.toString());
+    prefs.setString(PreferencesKeys.activeUser, json.encode(user.toJson()));
+  }
 }

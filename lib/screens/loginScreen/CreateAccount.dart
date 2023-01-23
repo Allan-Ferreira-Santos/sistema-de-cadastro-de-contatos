@@ -4,6 +4,7 @@ import 'package:test_vaga/controllers/UserController.dart';
 
 import '../../components/input/Input.dart';
 import '../../components/input/InputObscure.dart';
+import '../../helpers/Validator.dart';
 
 class CreateAccount extends StatefulWidget {
   const CreateAccount({super.key});
@@ -24,14 +25,14 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: const Color.fromARGB(255, 34, 32, 32),
         body: Center(
           child: Container(
               padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
               width: size.width * 0.3,
               height: size.height * 0.88,
               decoration: const BoxDecoration(
-                  color: Colors.black45,
+                  color: Color.fromARGB(255, 144, 143, 141),
                   borderRadius: BorderRadius.all(Radius.circular(8))),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,38 +41,22 @@ class _CreateAccountState extends State<CreateAccount> {
                   SizedBox(
                     child: Row(
                       children: [
-                        Expanded(
-                            flex: 1,
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: const SizedBox(
-                                child: Icon(
-                                  Icons.chevron_left_outlined,
-                                  size: 30,
-                                ),
-                              ),
-                            )),
-                        Expanded(
-                            flex: 8,
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.only(bottom: 20, top: 20),
-                              width: size.width,
-                              child: const Text(
-                                'Preencha todos os Campos para se cadastrar',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                            )),
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: const Text(
+                            'Crie sua Conta',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  SizedBox(
+                  Container(
+                    padding: const EdgeInsets.only(top: 20),
                     child: Form(
                         key: _formKey,
                         child: Column(
@@ -86,9 +71,14 @@ class _CreateAccountState extends State<CreateAccount> {
                                 textStyle: const TextStyle(color: Colors.black),
                                 keyboardType: TextInputType.text,
                                 validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'E-mail inválido!';
+                                  if (Validator().emailValidator(value) !=
+                                      null) {
+                                    String response =
+                                        Validator().emailValidator(value);
+
+                                    return response;
                                   }
+                                  return null;
                                 },
                                 onChanged: (value) {
                                   setState(() {
@@ -115,10 +105,11 @@ class _CreateAccountState extends State<CreateAccount> {
                             SizedBox(
                               child: InputCpf(
                                 validator: (value) {
-                                  if (value == null ||
-                                      value.isEmpty ||
-                                      value.length != 14) {
-                                    return 'CPF inválido!';
+                                  if (Validator().cpfValidator(value) != null) {
+                                    String response =
+                                        Validator().cpfValidator(value);
+
+                                    return response;
                                   }
                                   return null;
                                 },
@@ -151,10 +142,12 @@ class _CreateAccountState extends State<CreateAccount> {
                                   password.text = value;
                                 },
                                 validator: (value) {
-                                  if (value == null ||
-                                      value.isEmpty ||
-                                      value.length < 8) {
-                                    return 'senha Invalida!';
+                                  if (Validator().passwordValidator(value) !=
+                                      null) {
+                                    String response =
+                                        Validator().passwordValidator(value);
+
+                                    return response;
                                   }
                                   return null;
                                 },
@@ -177,10 +170,12 @@ class _CreateAccountState extends State<CreateAccount> {
                                 contentPadding:
                                     const EdgeInsets.fromLTRB(15, 0, 0, 0),
                                 validator: (value) {
-                                  if (value == null ||
-                                      value.isEmpty ||
-                                      value.length < 8) {
-                                    return 'senha Invalida!';
+                                  if (Validator().passwordValidator(value) !=
+                                      null) {
+                                    String response =
+                                        Validator().passwordValidator(value);
+
+                                    return response;
                                   } else if (password.text !=
                                       confirmPassword.text) {
                                     return 'Senha errada!';
@@ -209,8 +204,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 }
                               },
                               child: Container(
-                                margin:
-                                    const EdgeInsets.fromLTRB(30, 30, 30, 30),
+                                margin: const EdgeInsets.fromLTRB(0, 30, 0, 15),
                                 padding: const EdgeInsets.all(10),
                                 width: size.width,
                                 decoration: BoxDecoration(
@@ -218,6 +212,26 @@ class _CreateAccountState extends State<CreateAccount> {
                                     borderRadius: BorderRadius.circular(20)),
                                 child: const Text(
                                   'Cadastrar',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                width: size.width,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: const Text(
+                                  'Voltar ',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w700,

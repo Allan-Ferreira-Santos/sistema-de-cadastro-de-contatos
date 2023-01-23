@@ -23,8 +23,8 @@ class _MapScreenState extends State<MapScreen> {
 
   /*
   * Initial setup
-  * @author  SGV
-  * @version 1.0 - 20220111 - initial release
+  * @author  Allan F Santos
+  * @version 1.0 - 20230121 - initial release
   * @return  void
   */
 

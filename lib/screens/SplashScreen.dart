@@ -18,8 +18,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   /*
   * Initial setup
-  * @author  SGV
-  * @version 1.0 - 20220111 - initial release
+  * @author  Allan F Santos
+  * @version 1.0 - 20230121 - initial release
   * @return  void
   */
   Future<void> initialSetup() async {
@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Color.fromARGB(255, 34, 32, 32),
       body: Center(child: CircularProgressIndicator()),
     );
   }
