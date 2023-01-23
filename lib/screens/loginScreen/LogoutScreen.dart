@@ -17,7 +17,7 @@ class _LogoutScreenState extends State<LogoutScreen> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Color.fromARGB(255, 144, 143, 141),
+      backgroundColor: const Color.fromARGB(255, 144, 143, 141),
       title: const Text(
         'Logout',
         textAlign: TextAlign.center,
